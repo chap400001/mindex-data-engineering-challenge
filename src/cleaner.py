@@ -88,3 +88,14 @@ def parse_currency(series: pd.Series) -> pd.Series:
     )
 
     return pd.to_numeric(normalized, errors="coerce")
+
+def clean_transactions(df: pd.DataFrame) -> pd.DataFrame:
+    """Apply transaction-specific cleaning rules discovered during profiling."""
+    cleaned = apply_base_cleaning(df)
+
+    cleaned = cleaned.drop_duplicates().copy()
+    cleaned["transaction_date"] = parse_mixed_dates(cleaned["transaction_date"])
+    cleaned["total_amount"] = parse_currency(cleaned["total_amount"])
+
+    return cleaned
+

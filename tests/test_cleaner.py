@@ -4,6 +4,7 @@ from src.cleaner import (
     normalize_column_names,
     parse_currency,
     parse_mixed_dates,
+    clean_transactions,
 )
 
 
@@ -53,3 +54,34 @@ def test_parse_currency():
     assert result.iloc[2] == 1185.40
     assert pd.isna(result.iloc[3])
     assert pd.isna(result.iloc[4])    
+
+def test_clean_transactions_removes_exact_duplicates():
+    dataframe = pd.DataFrame(
+        [
+            {
+                "transaction_id": "TXN1001",
+                "transaction_date": "2026-03-05",
+                "store_id": "S001",
+                "product_id": "P001",
+                "customer_id": "CUST001",
+                "quantity": 2,
+                "unit_price": 10.00,
+                "total_amount": "$20.00",
+            },
+            {
+                "transaction_id": "TXN1001",
+                "transaction_date": "2026-03-05",
+                "store_id": "S001",
+                "product_id": "P001",
+                "customer_id": "CUST001",
+                "quantity": 2,
+                "unit_price": 10.00,
+                "total_amount": "$20.00",
+            },
+        ]
+    )
+
+    result = clean_transactions(dataframe)
+
+    assert len(result) == 1
+    assert result.iloc[0]["transaction_id"] == "TXN1001"
