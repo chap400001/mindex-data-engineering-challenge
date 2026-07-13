@@ -8,7 +8,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from cleaner import apply_base_cleaning
+#from cleaner import apply_base_cleaning
+from cleaner import apply_base_cleaning, clean_transactions
+
 from profiler import profile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -55,8 +57,9 @@ def main() -> None:
 
     LOGGER.info("Applying safe base normalization")
     cleaned = {
-        name: apply_base_cleaning(dataframe)
-        for name, dataframe in sources.items()
+       "transactions": clean_transactions(sources["transactions"]),
+        "stores": apply_base_cleaning(sources["stores"]),
+        "products": apply_base_cleaning(sources["products"]),
     }
 
     for name, dataframe in cleaned.items():

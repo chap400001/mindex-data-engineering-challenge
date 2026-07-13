@@ -47,3 +47,44 @@ def standardize_missing_strings(df: pd.DataFrame) -> pd.DataFrame:
 def apply_base_cleaning(df: pd.DataFrame) -> pd.DataFrame:
     """Apply safe, source-agnostic normalization before business rules."""
     return standardize_missing_strings(trim_string_values(normalize_column_names(df)))
+
+def parse_mixed_dates(series: pd.Series) -> pd.Series:
+    """Parse known transaction date formats into normalized pandas dates."""
+    parsed = pd.to_datetime(series, format="%Y-%m-%d", errors="coerce")
+
+    unresolved = parsed.isna() & series.notna()
+    parsed.loc[unresolved] = pd.to_datetime(
+        series.loc[unresolved],
+        format="%m/%d/%Y",
+        errors="coerce",
+    )
+
+    unresolved = parsed.isna() & series.notna()
+    parsed.loc[unresolved] = pd.to_datetime(
+        series.loc[unresolved],
+        format="%d-%m-%Y",
+        errors="coerce",
+    )
+
+    return parsed
+
+
+def clean_transactions(df: pd.DataFrame) -> pd.DataFrame:
+    """Apply transaction-specific cleaning rules discovered during profiling."""
+    cleaned = apply_base_cleaning(df)
+
+    cleaned["transaction_date"] = parse_mixed_dates(cleaned["transaction_date"])
+    cleaned["total_amount"] = parse_currency(cleaned["total_amount"])
+
+    return cleaned
+
+def parse_currency(series: pd.Series) -> pd.Series:
+    """Convert currency-like text values into numeric amounts."""
+    normalized = (
+        series.astype("string")
+        .str.replace("$", "", regex=False)
+        .str.replace(",", "", regex=False)
+        .str.strip()
+    )
+
+    return pd.to_numeric(normalized, errors="coerce")

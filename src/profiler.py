@@ -67,8 +67,8 @@ def profile(df: pd.DataFrame, name: str) -> dict[str, Any]:
             parsed = pd.to_datetime(series, errors="coerce")
             valid = parsed.dropna()
             details["date"] = {
-                "valid_date_count": int(valid.size),
-                "invalid_date_count": int(series.notna().sum() - valid.size),
+                "parsed_date_count": int(valid.size),
+                "unparsed_date_count": int(series.notna().sum() - valid.size),
                 "min_date": _json_value(valid.min()) if not valid.empty else None,
                 "max_date": _json_value(valid.max()) if not valid.empty else None,
                 "future_date_count": int((valid.dt.normalize() > today).sum()) if not valid.empty else 0,

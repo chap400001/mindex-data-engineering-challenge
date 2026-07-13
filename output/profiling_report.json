@@ -1,0 +1,188 @@
+{
+  "transactions": {
+    "name": "transactions",
+    "row_count": 505,
+    "column_count": 8,
+    "duplicate_row_count": 15,
+    "columns": {
+      "transaction_id": {
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 490
+      },
+      "transaction_date": {
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 111,
+        "date": {
+          "parsed_date_count": 485,
+          "unparsed_date_count": 20,
+          "min_date": "2026-03-05T00:00:00",
+          "max_date": "2026-06-27T00:00:00",
+          "future_date_count": 0
+        }
+      },
+      "store_id": {
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 19
+      },
+      "product_id": {
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 32
+      },
+      "customer_id": {
+        "dtype": "str",
+        "null_count": 40,
+        "null_percentage": 7.92,
+        "distinct_count": 230
+      },
+      "quantity": {
+        "dtype": "int64",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 11,
+        "numeric": {
+          "min": -5,
+          "max": 5,
+          "mean": 2.623762376237624,
+          "zero_count": 5,
+          "negative_count": 30
+        }
+      },
+      "unit_price": {
+        "dtype": "float64",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 30,
+        "numeric": {
+          "min": 10.53,
+          "max": 245.84,
+          "mean": 123.83506930693068,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      "total_amount": {
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 207
+      }
+    }
+  },
+  "stores": {
+    "name": "stores",
+    "row_count": 16,
+    "column_count": 7,
+    "duplicate_row_count": 0,
+    "columns": {
+      "store_id": {
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 15
+      },
+      "store_name": {
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 16
+      },
+      "city": {
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 11
+      },
+      "state": {
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 7
+      },
+      "zip_code": {
+        "dtype": "int64",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 15,
+        "numeric": {
+          "min": 938,
+          "max": 98036,
+          "mean": 54588.25,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      "region": {
+        "dtype": "str",
+        "null_count": 2,
+        "null_percentage": 12.5,
+        "distinct_count": 4
+      },
+      "opened_date": {
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 15,
+        "date": {
+          "parsed_date_count": 16,
+          "unparsed_date_count": 0,
+          "min_date": "2006-01-22T00:00:00",
+          "max_date": "2020-01-15T00:00:00",
+          "future_date_count": 0
+        }
+      }
+    }
+  },
+  "products": {
+    "name": "products",
+    "row_count": 32,
+    "column_count": 5,
+    "duplicate_row_count": 1,
+    "columns": {
+      "product_id": {
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 30
+      },
+      "product_name": {
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 30
+      },
+      "category": {
+        "dtype": "str",
+        "null_count": 5,
+        "null_percentage": 15.62,
+        "distinct_count": 5
+      },
+      "unit_price": {
+        "dtype": "float64",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 31,
+        "numeric": {
+          "min": 0.0,
+          "max": 245.84,
+          "mean": 119.165625,
+          "zero_count": 1,
+          "negative_count": 0
+        }
+      },
+      "supplier_id": {
+        "dtype": "str",
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "distinct_count": 5
+      }
+    }
+  }
+}
