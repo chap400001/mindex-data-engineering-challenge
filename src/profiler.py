@@ -50,6 +50,7 @@ def profile(df: pd.DataFrame, name: str) -> dict[str, Any]:
             "dtype": str(series.dtype),
             "null_count": null_count,
             "null_percentage": round((null_count / row_count * 100), 2) if row_count else 0.0,
+            "distinct_count": int(series.nunique(dropna=True)),
         }
 
         if pd.api.types.is_numeric_dtype(series):
