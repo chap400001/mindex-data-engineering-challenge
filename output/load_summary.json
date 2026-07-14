@@ -1,0 +1,19 @@
+{
+  "database_path": "D:\\mindex-code-challenge-starter\\mindex-code-challenge\\output\\warehouse.db",
+  "table_row_counts": {
+    "dim_date": 115,
+    "dim_store": 15,
+    "dim_product": 30,
+    "fact_sales": 482
+  },
+  "transaction_exclusions": {
+    "source_rows": 490,
+    "duplicate_transaction_ids": 0,
+    "invalid_transaction_dates": 0,
+    "unknown_store_ids": 5,
+    "unknown_product_ids": 3,
+    "invalid_quantity_or_unit_price": 0,
+    "loaded_fact_rows": 482,
+    "excluded_rows": 8
+  }
+}

@@ -12,6 +12,7 @@ import pandas as pd
 from cleaner import apply_base_cleaning, clean_transactions
 
 from profiler import profile
+from loader import load_warehouse
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
@@ -65,7 +66,19 @@ def main() -> None:
     for name, dataframe in cleaned.items():
         dataframe.to_csv(OUTPUT_DIR / f"{name}_cleaned_preview.csv", index=False)
 
-    LOGGER.info("Baseline complete. Review profiling_report.json before adding business rules.")
+    LOGGER.info("Building SQLite star schema")
+    load_summary = load_warehouse(
+        OUTPUT_DIR / "warehouse.db",
+        cleaned["transactions"],
+        cleaned["stores"],
+        cleaned["products"],
+    )
+    write_json(load_summary, OUTPUT_DIR / "load_summary.json")
+
+    LOGGER.info(
+        "Warehouse complete: %s fact rows loaded",
+        load_summary["table_row_counts"]["fact_sales"],
+    )
 
 
 if __name__ == "__main__":
