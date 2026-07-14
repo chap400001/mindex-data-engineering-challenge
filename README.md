@@ -115,31 +115,42 @@ analytics.json
 
 # Data Quality Findings
 
-The pipeline profiles each source before applying any transformations.
+The pipeline profiles each source before applying any transformations. Profiling results are written to:
 
-Cleaning includes:
+`output/profiling_report.json`
 
-- Standardized column names
-- Trimmed whitespace
-- Standardized missing values
-- Parsed mixed date formats
-- Parsed currency values
-- Removed exact duplicate transactions
-- Preserved invalid records until explicit loading decisions were made
+Cleaning transformations and warehouse loading decisions are summarized below.
 
-The warehouse loading phase excludes only records that cannot be modeled correctly, including:
+| Issue                                           | File         | Count                   | Decision                                 | Rationale                             
+|-------                                          |------        |------:                  |----------                                |-----------                            
+| Leading/trailing whitespace                     | All          | All string columns      | Trimmed whitespace                       | Prevents inconsistent values caused by accidental spacing and improves joins and filtering. 
+| Inconsistent column names                       | All          | All columns             | Normalized to snake_case                 | Provides a consistent naming convention throughout the pipeline and warehouse. 
+| Multiple missing value representations          | All          | Variable                | Standardized to null                     | Ensures missing values are handled consistently during profiling, cleaning, and loading. 
+| Mixed date formats                              | Transactions | Transaction date column | Parsed into a consistent datetime format | Enables reliable filtering, comparisons, and loading into the date dimension. 
+| Currency formatting ($, commas, parentheses)    | Transactions | Currency columns        | Converted to numeric values              | Allows mathematical calculations and analytical queries. 
+| Exact duplicate transaction rows                | Transactions | 15                      | Removed during cleaning                  | Exact duplicate records provide no additional business value and would otherwise double-count sales. 
+| Unknown store references                        | Transactions | 5                       | Excluded during warehouse loading        | Fact rows without a matching store dimension would violate referential integrity. 
+| Unknown product references                      | Transactions | 3                       | Excluded during warehouse loading        | Fact rows without a matching product dimension cannot be modeled correctly. 
+| Duplicate transaction IDs                       | Transactions | 0                       | No action required                       | No duplicate business keys remained after the cleaning phase. 
+| Invalid transaction dates                       | Transactions | 0                       | No action required                       | All remaining transaction dates were successfully parsed before loading. 
+| Invalid quantity or unit price                  | Transactions | 0                       | No action required                       | All remaining numeric values required for loading were valid. 
+| Negative quantities and sales amounts (returns) | Transactions | Retained                | Preserved using the `is_return` flag     | Returns represent valid business events and reduce net revenue rather than being discarded. 
 
-- Invalid transaction dates
-- Unknown product references
-- Unknown store references
-- Duplicate transaction IDs
-- Invalid numeric values required for loading
+## Pipeline Summary
 
-A detailed summary of excluded records is written to:
+The transaction data moved through the pipeline as follows:
 
-```
-output/load_summary.json
-```
+| Stage                                                                | Transaction Count 
+|-------                                                               |------------------:
+| Raw source transactions                                              | 505               
+| Exact duplicate rows removed during cleaning                         | 15 
+| Transactions presented to warehouse loading                          | 490 
+| Excluded during warehouse loading (unknown store/product references) | 8 
+| Final fact records loaded                                            | 482 
+
+A detailed summary of warehouse loading decisions is written to:
+
+`output/load_summary.json`
 
 ---
 
