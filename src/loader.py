@@ -135,33 +135,104 @@ def build_store_dimension(stores: pd.DataFrame) -> pd.DataFrame:
     return dimension[["store_key", "store_id", "store_name", "region"]]
 
 
-def build_product_dimension(products: pd.DataFrame) -> pd.DataFrame:
-    """Build a product dimension while retaining the catalog's current list price."""
+def build_product_dimension(
+    products: pd.DataFrame,
+    transactions: pd.DataFrame,
+) -> pd.DataFrame:
+    """Build the product dimension with the latest observed selling price.
+
+    The most recent valid transaction price becomes current_list_price.
+    Products without a valid transaction price retain their catalog price.
+    Historical prices remain preserved in fact_sales.unit_price.
+    """
     _require_columns(products, {"product_id"}, "products")
+    _require_columns(
+        transactions,
+        {"product_id", "transaction_date", "unit_price"},
+        "transactions",
+    )
 
     price_column = next(
-        (name for name in ("current_list_price", "list_price", "price") if name in products),
+        (
+            name
+            for name in ("current_list_price", "list_price", "price")
+            if name in products
+        ),
         None,
     )
-    columns = [column for column in ("product_id", "product_name", "category") if column in products]
+
+    columns = [
+        column
+        for column in ("product_id", "product_name", "category")
+        if column in products
+    ]
+
     if price_column:
         columns.append(price_column)
 
-    dimension = products[columns].dropna(subset=["product_id"]).drop_duplicates("product_id").copy()
-    dimension = dimension.sort_values("product_id").reset_index(drop=True)
-    dimension.insert(0, "product_key", range(1, len(dimension) + 1))
+    dimension = (
+        products[columns]
+        .dropna(subset=["product_id"])
+        .drop_duplicates("product_id", keep="first")
+        .copy()
+    )
 
     for optional_column in ("product_name", "category"):
         if optional_column not in dimension:
             dimension[optional_column] = pd.NA
 
     if price_column:
-        dimension = dimension.rename(columns={price_column: "current_list_price"})
+        dimension = dimension.rename(
+            columns={price_column: "current_list_price"}
+        )
+        dimension["current_list_price"] = pd.to_numeric(
+            dimension["current_list_price"],
+            errors="coerce",
+        )
     else:
         dimension["current_list_price"] = pd.NA
 
+    observed_prices = transactions[
+        ["product_id", "transaction_date", "unit_price"]
+    ].copy()
+
+    observed_prices["transaction_date"] = pd.to_datetime(
+        observed_prices["transaction_date"],
+        errors="coerce",
+    )
+    observed_prices["unit_price"] = pd.to_numeric(
+        observed_prices["unit_price"],
+        errors="coerce",
+    )
+
+    observed_prices = observed_prices.dropna(
+        subset=["product_id", "transaction_date", "unit_price"]
+    )
+
+    latest_observed_prices = (
+        observed_prices
+        .sort_values(["transaction_date"])
+        .drop_duplicates("product_id", keep="last")
+        .set_index("product_id")["unit_price"]
+    )
+
+    dimension["current_list_price"] = (
+        dimension["product_id"]
+        .map(latest_observed_prices)
+        .fillna(dimension["current_list_price"])
+    )
+
+    dimension = dimension.sort_values("product_id").reset_index(drop=True)
+    dimension.insert(0, "product_key", range(1, len(dimension) + 1))
+
     return dimension[
-        ["product_key", "product_id", "product_name", "category", "current_list_price"]
+        [
+            "product_key",
+            "product_id",
+            "product_name",
+            "category",
+            "current_list_price",
+        ]
     ]
 
 
@@ -284,8 +355,8 @@ def load_warehouse(
     """Create and populate the complete SQLite warehouse in one transaction."""
     dim_date = build_date_dimension(transactions)
     dim_store = build_store_dimension(stores)
-    dim_product = build_product_dimension(products)
-    fact_sales, exclusions = build_sales_fact(transactions, dim_store, dim_product)
+    dim_product = build_product_dimension(products, transactions)
+    fact_sales, exclusions = build_sales_fact(transactions,dim_store,dim_product,)
 
     with connect(database_path) as connection:
         create_schema(connection)

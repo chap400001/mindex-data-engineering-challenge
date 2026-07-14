@@ -1,0 +1,408 @@
+{
+  "top_5_stores_recent_30_days": [
+    {
+      "store_id": "S012",
+      "store_name": "The Domain",
+      "region": "South",
+      "net_revenue": 2072.94
+    },
+    {
+      "store_id": "S009",
+      "store_name": "Tucson Mall",
+      "region": "West",
+      "net_revenue": 1445.76
+    },
+    {
+      "store_id": "S010",
+      "store_name": "Park Place Mall",
+      "region": "West",
+      "net_revenue": 875.92
+    },
+    {
+      "store_id": "S013",
+      "store_name": "Cascade Station",
+      "region": null,
+      "net_revenue": 717.75
+    },
+    {
+      "store_id": "S011",
+      "store_name": "Southpark Meadows",
+      "region": "South",
+      "net_revenue": 607.52
+    }
+  ],
+  "month_over_month_revenue_by_category": [
+    {
+      "category": null,
+      "revenue_month": "2026-03",
+      "net_revenue": 5939.29,
+      "prior_month_revenue": null,
+      "month_over_month_change_pct": null
+    },
+    {
+      "category": null,
+      "revenue_month": "2026-04",
+      "net_revenue": 7290.97,
+      "prior_month_revenue": 5939.29,
+      "month_over_month_change_pct": 22.76
+    },
+    {
+      "category": null,
+      "revenue_month": "2026-05",
+      "net_revenue": 9932.69,
+      "prior_month_revenue": 7290.97,
+      "month_over_month_change_pct": 36.23
+    },
+    {
+      "category": null,
+      "revenue_month": "2026-06",
+      "net_revenue": 73.56,
+      "prior_month_revenue": 9932.69,
+      "month_over_month_change_pct": -99.26
+    },
+    {
+      "category": "Apparel",
+      "revenue_month": "2026-03",
+      "net_revenue": 9844.6,
+      "prior_month_revenue": null,
+      "month_over_month_change_pct": null
+    },
+    {
+      "category": "Apparel",
+      "revenue_month": "2026-04",
+      "net_revenue": 11032.38,
+      "prior_month_revenue": 9844.6,
+      "month_over_month_change_pct": 12.07
+    },
+    {
+      "category": "Apparel",
+      "revenue_month": "2026-05",
+      "net_revenue": 14304.78,
+      "prior_month_revenue": 11032.38,
+      "month_over_month_change_pct": 29.66
+    },
+    {
+      "category": "Apparel",
+      "revenue_month": "2026-06",
+      "net_revenue": 899.03,
+      "prior_month_revenue": 14304.78,
+      "month_over_month_change_pct": -93.72
+    },
+    {
+      "category": "Electronics",
+      "revenue_month": "2026-03",
+      "net_revenue": 4015.66,
+      "prior_month_revenue": null,
+      "month_over_month_change_pct": null
+    },
+    {
+      "category": "Electronics",
+      "revenue_month": "2026-04",
+      "net_revenue": 7313.81,
+      "prior_month_revenue": 4015.66,
+      "month_over_month_change_pct": 82.13
+    },
+    {
+      "category": "Electronics",
+      "revenue_month": "2026-05",
+      "net_revenue": 12402.46,
+      "prior_month_revenue": 7313.81,
+      "month_over_month_change_pct": 69.58
+    },
+    {
+      "category": "Electronics",
+      "revenue_month": "2026-06",
+      "net_revenue": 157.39,
+      "prior_month_revenue": 12402.46,
+      "month_over_month_change_pct": -98.73
+    },
+    {
+      "category": "Food & Beverage",
+      "revenue_month": "2026-03",
+      "net_revenue": 1198.94,
+      "prior_month_revenue": null,
+      "month_over_month_change_pct": null
+    },
+    {
+      "category": "Food & Beverage",
+      "revenue_month": "2026-04",
+      "net_revenue": 6033.43,
+      "prior_month_revenue": 1198.94,
+      "month_over_month_change_pct": 403.23
+    },
+    {
+      "category": "Food & Beverage",
+      "revenue_month": "2026-05",
+      "net_revenue": 7902.99,
+      "prior_month_revenue": 6033.43,
+      "month_over_month_change_pct": 30.99
+    },
+    {
+      "category": "Home & Garden",
+      "revenue_month": "2026-03",
+      "net_revenue": 2199.83,
+      "prior_month_revenue": null,
+      "month_over_month_change_pct": null
+    },
+    {
+      "category": "Home & Garden",
+      "revenue_month": "2026-04",
+      "net_revenue": 2717.62,
+      "prior_month_revenue": 2199.83,
+      "month_over_month_change_pct": 23.54
+    },
+    {
+      "category": "Home & Garden",
+      "revenue_month": "2026-05",
+      "net_revenue": 4658.36,
+      "prior_month_revenue": 2717.62,
+      "month_over_month_change_pct": 71.41
+    },
+    {
+      "category": "Home & Garden",
+      "revenue_month": "2026-06",
+      "net_revenue": 64.05,
+      "prior_month_revenue": 4658.36,
+      "month_over_month_change_pct": -98.63
+    },
+    {
+      "category": "Office Supplies",
+      "revenue_month": "2026-03",
+      "net_revenue": 18496.95,
+      "prior_month_revenue": null,
+      "month_over_month_change_pct": null
+    },
+    {
+      "category": "Office Supplies",
+      "revenue_month": "2026-04",
+      "net_revenue": 19855.01,
+      "prior_month_revenue": 18496.95,
+      "month_over_month_change_pct": 7.34
+    },
+    {
+      "category": "Office Supplies",
+      "revenue_month": "2026-05",
+      "net_revenue": 12025.25,
+      "prior_month_revenue": 19855.01,
+      "month_over_month_change_pct": -39.43
+    },
+    {
+      "category": "Office Supplies",
+      "revenue_month": "2026-06",
+      "net_revenue": 398.8,
+      "prior_month_revenue": 12025.25,
+      "month_over_month_change_pct": -96.68
+    }
+  ],
+  "return_rate_by_store": [
+    {
+      "store_id": "S015",
+      "store_name": "Alderwood Mall",
+      "total_transactions": 26,
+      "return_transactions": 4,
+      "return_rate_pct": 15.38,
+      "exceeds_10_percent": 1
+    },
+    {
+      "store_id": "S006",
+      "store_name": "Lakeside Shopping Ctr",
+      "total_transactions": 32,
+      "return_transactions": 4,
+      "return_rate_pct": 12.5,
+      "exceeds_10_percent": 1
+    },
+    {
+      "store_id": "S008",
+      "store_name": "Galleria at Crystal Run",
+      "total_transactions": 44,
+      "return_transactions": 5,
+      "return_rate_pct": 11.36,
+      "exceeds_10_percent": 1
+    },
+    {
+      "store_id": "S010",
+      "store_name": "Park Place Mall",
+      "total_transactions": 37,
+      "return_transactions": 3,
+      "return_rate_pct": 8.11,
+      "exceeds_10_percent": 0
+    },
+    {
+      "store_id": "S007",
+      "store_name": "Downtown Rochester",
+      "total_transactions": 28,
+      "return_transactions": 2,
+      "return_rate_pct": 7.14,
+      "exceeds_10_percent": 0
+    },
+    {
+      "store_id": "S001",
+      "store_name": "Eastview Mall",
+      "total_transactions": 35,
+      "return_transactions": 2,
+      "return_rate_pct": 5.71,
+      "exceeds_10_percent": 0
+    },
+    {
+      "store_id": "S011",
+      "store_name": "Southpark Meadows",
+      "total_transactions": 35,
+      "return_transactions": 2,
+      "return_rate_pct": 5.71,
+      "exceeds_10_percent": 0
+    },
+    {
+      "store_id": "S002",
+      "store_name": "Marketplace Mall",
+      "total_transactions": 37,
+      "return_transactions": 2,
+      "return_rate_pct": 5.41,
+      "exceeds_10_percent": 0
+    },
+    {
+      "store_id": "S004",
+      "store_name": "Crossroads Center",
+      "total_transactions": 19,
+      "return_transactions": 1,
+      "return_rate_pct": 5.26,
+      "exceeds_10_percent": 0
+    },
+    {
+      "store_id": "S003",
+      "store_name": "Greece Ridge Center",
+      "total_transactions": 40,
+      "return_transactions": 2,
+      "return_rate_pct": 5.0,
+      "exceeds_10_percent": 0
+    },
+    {
+      "store_id": "S012",
+      "store_name": "The Domain",
+      "total_transactions": 24,
+      "return_transactions": 1,
+      "return_rate_pct": 4.17,
+      "exceeds_10_percent": 0
+    },
+    {
+      "store_id": "S005",
+      "store_name": "Mall of America",
+      "total_transactions": 30,
+      "return_transactions": 1,
+      "return_rate_pct": 3.33,
+      "exceeds_10_percent": 0
+    },
+    {
+      "store_id": "S013",
+      "store_name": "Cascade Station",
+      "total_transactions": 31,
+      "return_transactions": 1,
+      "return_rate_pct": 3.23,
+      "exceeds_10_percent": 0
+    },
+    {
+      "store_id": "S009",
+      "store_name": "Tucson Mall",
+      "total_transactions": 30,
+      "return_transactions": 0,
+      "return_rate_pct": 0.0,
+      "exceeds_10_percent": 0
+    },
+    {
+      "store_id": "S014",
+      "store_name": "Lloyd Center",
+      "total_transactions": 34,
+      "return_transactions": 0,
+      "return_rate_pct": 0.0,
+      "exceeds_10_percent": 0
+    }
+  ],
+  "average_transaction_value_by_region": [
+    {
+      "region": null,
+      "transaction_count": 64,
+      "average_transaction_value": 396.64
+    },
+    {
+      "region": "South",
+      "transaction_count": 84,
+      "average_transaction_value": 381.74
+    },
+    {
+      "region": "Northeast",
+      "transaction_count": 171,
+      "average_transaction_value": 378.67
+    },
+    {
+      "region": "Midwest",
+      "transaction_count": 47,
+      "average_transaction_value": 367.82
+    },
+    {
+      "region": "West",
+      "transaction_count": 86,
+      "average_transaction_value": 339.75
+    }
+  ],
+  "top_10_customers_by_lifetime_spend": [
+    {
+      "customer_id": "CUST0213",
+      "transaction_count": 4,
+      "lifetime_spend": 3077.96,
+      "average_order_value": 769.49
+    },
+    {
+      "customer_id": "CUST0170",
+      "transaction_count": 5,
+      "lifetime_spend": 2854.52,
+      "average_order_value": 570.9
+    },
+    {
+      "customer_id": "CUST0287",
+      "transaction_count": 4,
+      "lifetime_spend": 2825.7,
+      "average_order_value": 706.42
+    },
+    {
+      "customer_id": "CUST0060",
+      "transaction_count": 2,
+      "lifetime_spend": 2414.6,
+      "average_order_value": 1207.3
+    },
+    {
+      "customer_id": "CUST0142",
+      "transaction_count": 3,
+      "lifetime_spend": 2284.7,
+      "average_order_value": 761.57
+    },
+    {
+      "customer_id": "CUST0255",
+      "transaction_count": 5,
+      "lifetime_spend": 2181.57,
+      "average_order_value": 436.31
+    },
+    {
+      "customer_id": "CUST0186",
+      "transaction_count": 4,
+      "lifetime_spend": 1906.56,
+      "average_order_value": 476.64
+    },
+    {
+      "customer_id": "CUST0085",
+      "transaction_count": 4,
+      "lifetime_spend": 1846.65,
+      "average_order_value": 461.66
+    },
+    {
+      "customer_id": "CUST0084",
+      "transaction_count": 4,
+      "lifetime_spend": 1831.43,
+      "average_order_value": 457.86
+    },
+    {
+      "customer_id": "CUST0118",
+      "transaction_count": 2,
+      "lifetime_spend": 1655.79,
+      "average_order_value": 827.89
+    }
+  ]
+}

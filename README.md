@@ -1,82 +1,285 @@
-# Mindex Data Engineer / Data Architect Code Challenge
+# Mindex Data Engineering / Data Architect Code Challenge
 
-## Status
+## Overview
 
-Initial project scaffold. The source-specific cleaning, dimensional mappings, and final analytics will be completed after profiling the generated raw CSV files.
+This project implements an end-to-end data pipeline that profiles, cleans, models, and analyzes retail transaction data provided as CSV extracts.
 
-## Architecture
+The solution emphasizes modular design, data quality, reproducibility, and clear modeling decisions while remaining intentionally lightweight for the scope of the exercise.
 
-```text
-data/raw/*.csv
-      |
-      v
-src/profiler.py ----------> output/profiling_report.json
-      |
-      v
-src/cleaner.py
-      |
-      v
-src/loader.py ------------> output/warehouse.db
-      |
-      v
-src/analytics.py ---------> output/analytics.json
+The pipeline performs the following steps:
+
+1. Read raw source files
+2. Profile data quality
+3. Apply reusable cleaning transformations
+4. Load a SQLite star schema
+5. Execute analytical queries
+6. Produce JSON outputs for downstream consumption
+
+---
+
+# Architecture
+
+```
+                +------------------+
+                | Raw CSV Files    |
+                +------------------+
+                         |
+                         v
+                +------------------+
+                | profiler.py      |
+                +------------------+
+                         |
+                         v
+                +------------------+
+                | cleaner.py       |
+                +------------------+
+                         |
+                         v
+                +------------------+
+                | loader.py        |
+                | SQLite Warehouse |
+                +------------------+
+                         |
+                         v
+                +------------------+
+                | analytics.py     |
+                +------------------+
+                         |
+                         v
+                +------------------+
+                | JSON Outputs     |
+                +------------------+
 ```
 
-## Setup
+---
 
-### Windows PowerShell
+# Project Structure
 
-```powershell
-py -3.11 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
+```
+src/
+    profiler.py
+    cleaner.py
+    loader.py
+    analytics.py
+    pipeline.py
+
+tests/
+
+data/raw/
+
+output/
+```
+
+---
+
+# Running the Project
+
+Install dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-Generate the challenge data using the supplied script:
+Run the pipeline
 
-```powershell
-python scripts/seed_data.py
-```
-
-Run the pipeline and tests:
-
-```powershell
+```bash
 python src/pipeline.py
-pytest tests/ -v
 ```
 
-## Data Quality Findings
+Run tests
 
-Complete this table from the profiling output and cleaning audit counts.
+```bash
+python -m pytest -v
+```
 
-| Issue | File | Count | Decision | Rationale |
-|---|---|---:|---|---|
-| Pending source profiling | — | — | — | Raw CSV files have not yet been generated in this scaffold. |
+---
 
-## Schema Design
+# Outputs
 
-The target is a star schema containing `dim_date`, `dim_store`, `dim_product`, and `fact_sales`.
+Running the pipeline produces:
 
-Key preliminary decisions:
+```
+output/
 
-- Store actual transaction price in `fact_sales`; a product's price can change over time and is therefore transactional rather than a stable product attribute.
-- Preserve returns as negative facts so they reduce net revenue.
-- Retain anonymous sales for store/product analytics, but exclude them only from customer-specific analytics.
-- Reject or quarantine facts whose required store, product, or transaction date cannot be resolved rather than silently assigning incorrect dimension keys.
+profiling_report.json
+transactions_cleaned_preview.csv
+stores_cleaned_preview.csv
+products_cleaned_preview.csv
 
-## Analytics Approach
+warehouse.db
+load_summary.json
+analytics.json
+```
 
-SQL will be used for final analytics because the modeled warehouse is the system of record, the queries remain independently testable, and the approach mirrors production warehouse usage.
+---
 
-## Productionization
+# Data Quality Findings
 
-A production implementation would use orchestrated, idempotent incremental loads; landing and quarantine zones; schema and freshness checks; data-quality assertions; structured logging and metrics; alerting; secrets management; CI/CD; and warehouse-native transformations such as dbt on Snowflake.
+The pipeline profiles each source before applying any transformations.
 
-## With More Time
+Cleaning includes:
 
-- Add source-to-target contracts and explicit schemas.
-- Add row-level rejection reporting and audit totals.
-- Add reconciliation tests between source, clean, rejected, and loaded record counts.
-- Add indexes and query-plan review for larger volumes.
-- Add CI automation for linting, tests, and end-to-end execution.
+- Standardized column names
+- Trimmed whitespace
+- Standardized missing values
+- Parsed mixed date formats
+- Parsed currency values
+- Removed exact duplicate transactions
+- Preserved invalid records until explicit loading decisions were made
+
+The warehouse loading phase excludes only records that cannot be modeled correctly, including:
+
+- Invalid transaction dates
+- Unknown product references
+- Unknown store references
+- Duplicate transaction IDs
+- Invalid numeric values required for loading
+
+A detailed summary of excluded records is written to:
+
+```
+output/load_summary.json
+```
+
+---
+
+# Warehouse Design
+
+A simple star schema was implemented.
+
+## Dimensions
+
+### dim_date
+
+Contains one row for every calendar date represented by the transaction data.
+
+Attributes include:
+
+- Year
+- Month
+- Quarter
+- Day of Week
+
+### dim_store
+
+Contains one row per retail location.
+
+### dim_product
+
+Contains one row per product.
+
+The `current_list_price` represents the most recently observed valid selling price for each product. If no transaction price exists, the original catalog price is retained.
+
+Historical pricing is preserved in the fact table.
+
+## Fact Table
+
+### fact_sales
+
+Contains one row per transaction.
+
+Measures include:
+
+- Quantity
+- Unit Price
+- Sales Amount
+
+Returns are preserved as negative transactions and identified using an `is_return` flag.
+
+---
+
+# Modeling Decisions
+
+## Products with Multiple Prices
+
+Products may be sold at different prices over time because of promotions or price changes.
+
+Rather than overwrite historical sales data, the warehouse stores:
+
+- Current observed selling price in `dim_product`
+- Actual transaction price in `fact_sales`
+
+This preserves historical accuracy without introducing a Type 2 Slowly Changing Dimension, which would be unnecessary for the scope of this exercise.
+
+---
+
+## Returns
+
+Returns remain in the warehouse.
+
+They reduce revenue rather than being excluded.
+
+This allows all analytical queries to report true net revenue.
+
+---
+
+## Excluded Records
+
+Records are excluded only when they cannot be loaded into a relational model while maintaining referential integrity.
+
+Examples include:
+
+- Invalid transaction dates
+- Missing dimension references
+- Duplicate transaction identifiers
+
+Counts for each exclusion are recorded in `load_summary.json`.
+
+---
+
+# Analytics
+
+The pipeline executes five analytical queries against the SQLite warehouse.
+
+1. Top five stores by net revenue during the latest 30-day reporting window.
+2. Month-over-month revenue change by product category.
+3. Return rate by store with stores exceeding a 10% threshold flagged.
+4. Average transaction value by region excluding returns.
+5. Top ten customers by lifetime spend excluding anonymous customers.
+
+Results are written to:
+
+```
+output/analytics.json
+```
+
+---
+
+# Testing
+
+Eight pytest tests validate:
+
+- Profiling logic
+- Cleaning transformations
+- Duplicate handling
+- Date parsing
+- Currency parsing
+- Warehouse analytics
+
+---
+
+# Production Considerations
+
+For a production implementation I would likely:
+
+- Orchestrate the pipeline using Airflow, Prefect, or Dagster.
+- Implement incremental rather than full-refresh loads.
+- Add schema validation using Great Expectations or Pandera.
+- Introduce structured logging and centralized monitoring.
+- Store warehouse data in Snowflake rather than SQLite.
+- Add CI/CD with GitHub Actions.
+- Add data lineage and operational metrics.
+
+---
+
+# Tradeoffs
+
+The goal of this exercise was to build a clean, understandable solution rather than a production-scale platform.
+
+I intentionally kept the implementation lightweight while emphasizing:
+
+- modular code
+- reusable transformations
+- documented decisions
+- testability
+- maintainability

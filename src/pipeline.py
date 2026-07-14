@@ -13,7 +13,7 @@ from cleaner import apply_base_cleaning, clean_transactions
 
 from profiler import profile
 from loader import load_warehouse
-
+from analytics import run_analytics
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
 OUTPUT_DIR = ROOT / "output"
@@ -79,7 +79,15 @@ def main() -> None:
         "Warehouse complete: %s fact rows loaded",
         load_summary["table_row_counts"]["fact_sales"],
     )
+    LOGGER.info("Running warehouse analytics")
+    analytics_results = run_analytics(OUTPUT_DIR / "warehouse.db")
 
+    write_json(
+        analytics_results,
+        OUTPUT_DIR / "analytics.json",
+    )
+
+    LOGGER.info("Analytics complete: output/analytics.json created")
 
 if __name__ == "__main__":
     main()
